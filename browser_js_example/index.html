@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forex Rates Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 350px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .forex-data {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .forex-data p {
+            margin: 8px 0;
+        }
+        .forex-data span {
+            font-weight: bold;
+        }
+        .status {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .loading {
+            font-size: 18px;
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript" src="fcs_forex.js"></script>
+    <script type="text/javascript">
+        async function main() {
+            // Instantiate FCSForex with your API key
+            const forexApi = new FCSForex('git_key');
+            const forexDataContainer = document.getElementById("forex-data");
+            const loadingMessage = document.getElementById("loading-message");
+            const statusMessage = document.getElementById("status-message");
+
+            try {
+                loadingMessage.style.display = "none"; // Hide loading message
+                const latestPrice = await forexApi.getLatestPrice('EUR/USD');
+                console.log("Latest Price:", latestPrice);
+
+                if (latestPrice) {
+                    const data = latestPrice.response[0]; // Extract forex data
+                    const askPrice = data.a !== undefined ? `${data.a}` : '<small>Available in pro plan</small>';
+                    const bidPrice = data.b !== undefined ? `${data.b}` : '<small>Available in pro plan</small>';
+                    const spread = data.sp !== undefined ? `${data.sp}` : '<small>Available in pro plan</small>';
+
+                    forexDataContainer.innerHTML = `
+                        <div class="forex-data">
+                            <p><span>Pair:</span> ${data.s}</p>
+                            <p><span>Open:</span> ${data.o}</p>
+                            <p><span>High:</span> ${data.h}</p>
+                            <p><span>Low:</span> ${data.l}</p>
+                            <p><span>Close:</span> ${data.c}</p>
+                            <p><span>Ask:</span> ${askPrice}</p>
+                            <p><span>Bid:</span> ${bidPrice}</p>
+                            <p><span>Spread:</span> ${spread}</p>
+                            <p><span>Change:</span> ${data.ch}</p>
+                            <p><span>Change %:</span> ${data.cp}</p>
+                            <p><span>Timestamp:</span> ${data.tm}</p>
+                        </div>
+                    `;
+
+                    statusMessage.textContent = "Data loaded successfully!";
+                    statusMessage.classList.remove('error');
+                    statusMessage.classList.add('success');
+                }
+            } catch (error) {
+                loadingMessage.style.display = "none";
+                forexDataContainer.innerHTML = "";
+                statusMessage.textContent = "Error fetching forex data!";
+                statusMessage.classList.remove('success');
+                statusMessage.classList.add('error');
+                console.error("Error fetching latest prices:", error);
+            }
+        }
+
+        window.onload = function() {
+            const forexDataContainer = document.getElementById("forex-data");
+            const loadingMessage = document.getElementById("loading-message");
+            loadingMessage.style.display = "block"; // Show loading message initially
+            forexDataContainer.innerHTML = "";
+            main();
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Forex Rates - EUR/USD</h1>
+        <div id="loading-message" class="loading">Loading...</div>
+        <div id="forex-data"></div>
+        <div id="status-message" class="status"></div>
+    </div>
+
+</body>
+</html>
