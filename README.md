@@ -1,8 +1,8 @@
-# FCSForex
+# FCS Forex API - Node JS
 
 **Last Updated**: 2024-11-13 (Version 3)
 
-A modern JavaScript library for accessing real-time forex data, technical indicators, and economic events using the FCS API. Effortlessly fetch forex rates, pivot points, moving averages, and more.
+A high-performance Node.js library for accessing real-time forex market data. Fully compatible with browsers and JavaScript, it provides developers with reliable, fast, and comprehensive access to currency exchange rates and market indicators using the Node.js forex API.
 
 ## Table of Contents
 
@@ -28,7 +28,7 @@ A modern JavaScript library for accessing real-time forex data, technical indica
 - [Support](#support)
 - [License](#license)
 
-## Installation
+## Start with Node JS Forex API Installation
 
 Install the package using npm:
 
@@ -48,7 +48,7 @@ Make sure to set your FCS API key when initializing the class:
 ```javascript
 const forexApi = new FCSForex('your_api_key_here');
 ```
-If you don't have an API key, sign up on the [FCS API website](https://fcsapi.com) to get one.
+If you don't have an API key, sign up on the [FCS API](https://fcsapi.com/login?q=signup) to get one.
 
 ## Usage
 
@@ -104,7 +104,7 @@ Latest Price :
 ```
 
 
-## Methods
+## Methods for Node JS Forex API
 
 ### `getSymbolsList`
 Fetch a list of available Forex or Crypto symbols.
